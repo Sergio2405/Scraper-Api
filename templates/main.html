@@ -1,28 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Page Title</title>
+<title>Reporte</title>
+<style>
+    #dates{
+	display:flex;
+	flex-direction:column
+    }
+
+    #dates > div{
+	border:1px solid black;
+	background-color:grey;
+    }
+    form {
+	display:grid;
+	grid-template-rows: 90% 10%
+    }
+</style>
 </head>
 <body>
 
 <h1>My First Heading</h1>
-<p>My first paragraph.</p>
+<p>Elija las fechas que desea obtener</p>
+<form style="width:500px;height:300px;border:1px solid red">
+    <div>
+	<input 
+	    type="date" 
+	    id = "dateSelector" 
+	    onchange="dates.innerHTML+=`<input value=${event.target.value}/>`"/> 
+	<div id="dates"><div>12/10/2022</div></div>
+    </div>
+    <button>Enviar</button>
+</form>
 <a href="../obtain" hidden id="export">Export file</a>
 <script>
-    const dates = [{"date":"12/10/2022"}];
 
-    const options = {
-	method: 'POST',
-	headers: {
-	'Content-Type': 'application/json',
-	},
-	body: JSON.stringify(dates),
-    };
+    function appendInput(event){
+    }
 
-    fetch('http://127.0.0.1:8001/generate', options).then(response => {
-	console.log(response);
-	document.getElementById("export").removeAttribute("hidden")
-	})
+    function formReport(event){
+    }
+
+    function getReport(dates){
+	const dates = [{"date":"12/10/2022"}];
+
+	const options = {
+	    method: 'POST',
+	    headers: {
+	    'Content-Type': 'application/json',
+	    },
+	    body: JSON.stringify(dates),
+	};
+
+	fetch('http://127.0.0.1:8001/generate', options).then(response => {
+	    console.log(response);
+	    document.getElementById("export").removeAttribute("hidden")
+	    })
+    }
 </script>
 </body>
 </html>
