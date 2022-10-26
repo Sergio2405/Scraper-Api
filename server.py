@@ -16,9 +16,6 @@ templates = Jinja2Templates(directory="templates")
 
 excel_path = "reporte.xlsx"
 
-class Date(BaseModel):
-    date:str
-
 @app.get("/")
 def verify():
     return "Connection working"
@@ -28,7 +25,7 @@ def main(request: Request):
     return templates.TemplateResponse("main.html", {"request": request})
 
 @app.post("/generate")
-def generate(dates:List[Date]):
+def generate(dates:List[str]):
     with Session() as req:
         r = req.get(URL) 
         soup = BeautifulSoup(r.content, 'html.parser') 
@@ -45,7 +42,7 @@ def generate(dates:List[Date]):
                     '__VIEWSTATE': vs,
                     '__VIEWSTATEGENERATOR': vsg,
                     '__EVENTVALIDATION':ev_val,
-                    'cboFecProceso':time.date, 
+                    'cboFecProceso':time, 
                     'btnConsultar':"Consultar"
                 }
             r = req.post(URL, data=data)
@@ -60,9 +57,9 @@ def generate(dates:List[Date]):
                     temp_tr.append(tds[i].string)
                 table.append(temp_tr)
             df = pd.DataFrame(table)
-            df.to_excel(writer, sheet_name=time.date.replace("/","|"),index=False)
+            df.to_excel(writer, sheet_name=time.replace("/","|"),index=False)
         writer.save()
-    print("guardando excel")
+    print("Saving Excel")
     return "Report generated" 
 
 @app.get("/obtain")

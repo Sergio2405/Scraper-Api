@@ -22,28 +22,29 @@
 
 <h1>My First Heading</h1>
 <p>Elija las fechas que desea obtener</p>
-<form style="width:500px;height:300px;border:1px solid red">
+<form style="width:500px;height:300px" onsubmit="submitFormReport(event)">
     <div>
 	<input 
 	    type="date" 
-	    id = "dateSelector" 
-	    onchange="dates.innerHTML+=`<input value=${event.target.value}/>`"/> 
-	<div id="dates"><div>12/10/2022</div></div>
+	    id="dateSelector" 
+	    onchange="dates.innerHTML+=`<label>${event.target.value}<input name=${event.target.value} hidden value=${event.target.value}/></label>`" 
+	/>
+	<div id="dates"></div>
     </div>
     <button>Enviar</button>
 </form>
-<a href="../obtain" hidden id="export">Export file</a>
+<a href="../obtain" hidden id="export">Export Excel File</a>
 <script>
+    function submitFormReport(e){
+	e.preventDefault();
+	const formData = new FormData(e.target);
+	const formProps = Object.fromEntries(formData);
 
-    function appendInput(event){
-    }
-
-    function formReport(event){
+	const dates_list = Object.keys(formProps).map(date => date.split("-").reverse().join("/"));
+	getReport(dates_list);
     }
 
     function getReport(dates){
-	const dates = [{"date":"12/10/2022"}];
-
 	const options = {
 	    method: 'POST',
 	    headers: {
@@ -51,6 +52,7 @@
 	    },
 	    body: JSON.stringify(dates),
 	};
+	console.log(options)
 
 	fetch('http://127.0.0.1:8001/generate', options).then(response => {
 	    console.log(response);
