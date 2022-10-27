@@ -16,12 +16,16 @@
 	display:grid;
 	grid-template-rows: 90% 10%
     }
+    body{
+	margin-left:35%;
+	margin-top:5%;
+    }
 </style>
 </head>
 <body>
 
-<h1>My First Heading</h1>
-<p>Elija las fechas que desea obtener</p>
+<h1>Scrap SBS data by date</h1>
+<p>Choose the dates you want</p>
 <form style="width:500px;height:300px" onsubmit="submitFormReport(event)">
     <div>
 	<input 
@@ -31,9 +35,9 @@
 	/>
 	<div id="dates"></div>
     </div>
-    <button>Enviar</button>
+    <button id="send">Send information</button>
 </form>
-<a href="../obtain" hidden id="export">Export Excel File</a>
+<a href="../obtain" id="export">Export Excel File</a>
 <script>
     function submitFormReport(e){
 	e.preventDefault();
@@ -52,11 +56,21 @@
 	    },
 	    body: JSON.stringify(dates),
 	};
-	console.log(options)
+	const export_tag = document.getElementById("export");
+	const send_button = document.getElementById("send");
+
+	send_button.disabled=true;
+	export_tag.hidden=true;
+
+	let interval = setTimeout(() => {
+	    let timer = document.getElementById("timer");
+	    timer.hidden=false;
+	    timer.innerHTML += parseFloat(timer.innerHTML)+1;
+	},1000);
 
 	fetch('http://127.0.0.1:8001/generate', options).then(response => {
-	    console.log(response);
-	    document.getElementById("export").removeAttribute("hidden")
+	    export_tag.hidden=false;
+	    send_button.disabled=false;
 	    })
     }
 </script>

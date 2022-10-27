@@ -53,10 +53,11 @@ def generate(dates:List[str]):
             for tr in report.find_all("tr"):
                 temp_tr=[]
                 tds = tr.find_all("td")
-                for i in [1,2,3,4,5,9]:
+                for i in [0,1,2,3,4,5,11,12,19]:
                     temp_tr.append(tds[i].string)
                 table.append(temp_tr)
-            df = pd.DataFrame(table)
+            df = pd.DataFrame(table,
+                    columns=["Nemónico","ISIN/Identif","Emisor","Moneda","P.Limpio %","TIR %","F. Emisión","F. Vencimiento","Duración"])
             df.to_excel(writer, sheet_name=time.replace("/","|"),index=False)
         writer.save()
     print("Saving Excel")
