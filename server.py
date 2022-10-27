@@ -31,7 +31,6 @@ def generate(dates:List[str]):
     with Session() as req:
         r = req.get(URL) 
         soup = BeautifulSoup(r.content, 'html.parser') 
-        #times = [item.get("value") for item in soup.findAll( "option",value=re.compile(re_))]
 
         vs = soup.find("input", id="__VIEWSTATE").get("value")
         vsg = soup.find("input", id="__VIEWSTATEGENERATOR").get("value")
@@ -56,7 +55,12 @@ def generate(dates:List[str]):
                 temp_tr=[]
                 tds = tr.find_all("td")
                 for i in [0,1,2,3,4,5,11,12,19]:
-                    temp_tr.append(tds[i].string)
+                    value = str(tds[i].string).replace(" ","")
+                    try: 
+                       value=float(value)
+                    except ValueError: 
+                       pass 
+                    temp_tr.append(value)
                 table.append(temp_tr)
             df = pd.DataFrame(table,
                     columns=["Nemónico","ISIN/Identif","Emisor","Moneda","P.Limpio %","TIR %","F. Emisión","F. Vencimiento","Duración"])
