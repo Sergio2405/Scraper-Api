@@ -32,11 +32,16 @@
 	    type="date" 
 	    id="dateSelector" 
 	    onchange="dates.innerHTML+=`<label>${event.target.value}<input name=${event.target.value} hidden value=${event.target.value}/></label>`" 
+	    onfocus="this.max=new Date().toISOString().split('T')[0]" 
 	/>
 	<div id="dates"></div>
     </div>
     <button id="send">Send information</button>
 </form>
+<button id="timer">0</button>
+<!--
+<img src="{{ static('/excel_icon.png') }}">
+-->
 <a href="../obtain" id="export">Export Excel File</a>
 <script>
     function submitFormReport(e){
@@ -58,19 +63,21 @@
 	};
 	const export_tag = document.getElementById("export");
 	const send_button = document.getElementById("send");
+	const timer = document.getElementById("timer");
 
 	send_button.disabled=true;
 	export_tag.hidden=true;
 
-	let interval = setTimeout(() => {
-	    let timer = document.getElementById("timer");
-	    timer.hidden=false;
-	    timer.innerHTML += parseFloat(timer.innerHTML)+1;
+	let interval = setInterval(() => {
+	    timer.innerHTML = parseFloat(timer.innerHTML)+1;
+	    console.log("contando");
 	},1000);
 
 	fetch('http://127.0.0.1:8001/generate', options).then(response => {
+	    console.log("response")
 	    export_tag.hidden=false;
 	    send_button.disabled=false;
+	    clearInterval(interval);
 	    })
     }
 </script>

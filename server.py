@@ -2,7 +2,7 @@ from typing import List
 from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
+from fastapi.staticfiles import StaticFiles
 from requests import Session
 from bs4 import BeautifulSoup 
 import pandas as pd 
@@ -12,6 +12,8 @@ URL = "https://www.sbs.gob.pe/app/pu/ccid/paginas/vp_rentafija.aspx"
 re_ = "^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$" 
 
 app = FastAPI()
+
+app.mount("/static",StaticFiles(directory="static"),name="static")
 templates = Jinja2Templates(directory="templates")
 
 excel_path = "reporte.xlsx"
