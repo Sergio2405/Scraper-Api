@@ -87,7 +87,7 @@
 	    timer.innerHTML = parseFloat(timer.innerHTML)+1;
 	},1000);
 
-	fetch('http://127.0.0.1:8001/generate', options).then(response => {
+	fetch('../generate', options).then(response => {
 	    export_tag.hidden=false;
 	    send_button.disabled=false;
 	    clearInterval(interval);
